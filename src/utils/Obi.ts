@@ -16,10 +16,10 @@ export const getObiResult = ({
 }: ObiProps) => {
   const obi = new Obi(schema);
   const getObiFunction = {
-    [ObiMode.encodeInput]: obi.encodeInput,
-    [ObiMode.encodeOutput]: obi.encodeOutput,
-    [ObiMode.decodeInput]: obi.decodeInput,
-    [ObiMode.decodeOutput]: obi.decodeOutput,
+    [ObiMode.encodeInput]: (value: any) => obi.encodeInput(value),
+    [ObiMode.encodeOutput]: (value: any) => obi.encodeOutput(value),
+    [ObiMode.decodeInput]: (value: Buffer) => obi.decodeInput(value),
+    [ObiMode.decodeOutput]: (value: Buffer) => obi.decodeOutput(value),
   };
 
   switch (mode) {

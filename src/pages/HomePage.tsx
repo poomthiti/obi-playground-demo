@@ -33,6 +33,7 @@ const Content = styled.div`
 const StyledButton = styled(Button)`
   font-weight: 600;
   text-transform: capitalize;
+  margin-top: 12px;
 `;
 
 interface RadioObject {
@@ -56,11 +57,10 @@ export const HomePage = () => {
   const [schema, setSchema] = useState<string>(
     "{symbol:string, px: u64, w: {a: u8, b: u8}, tb: [string]} / string"
   );
-  const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeInput);
-  const [targetType, setTargetType] = useState<TargetType>(TargetType.base64);
-  const [targetString, setTargetString] = useState<string>("");
+  const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeOutput);
+  const [targetType, setTargetType] = useState<TargetType>(TargetType.string);
+  const [targetString, setTargetString] = useState<string>("test");
 
-  console.log({ schema, obiMode, targetType, targetString });
   return (
     <Container>
       <Title>OBI Playground</Title>
@@ -93,7 +93,20 @@ export const HomePage = () => {
           value={targetString}
           handleChange={(value: any) => setTargetString(value)}
         />
-        <StyledButton variant="contained">Get Result</StyledButton>
+        <StyledButton
+          variant="contained"
+          onClick={() => {
+            const result = getObiResult({
+              schema,
+              mode: obiMode,
+              targetString,
+              targetType,
+            });
+            console.log(result.toString("hex"));
+          }}
+        >
+          Get Result
+        </StyledButton>
       </Content>
     </Container>
   );
