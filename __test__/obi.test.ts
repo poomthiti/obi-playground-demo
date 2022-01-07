@@ -35,12 +35,18 @@ describe("Expect Obi custom function to work correctly", () => {
         "00000003425443000000000000232801020000000200000001610000000162",
       targetType: TargetType.hex,
     };
-    expect(getObiResult(payload)).toBe({
-      symbol: "BTC",
-      px: 9000,
-      w: { a: 1, b: 2 },
-      tb: ["a", "b"],
-    });
+    expect(getObiResult(payload)).toBe(
+      JSON.stringify(
+        {
+          symbol: "BTC",
+          px: 9000,
+          w: { a: 1, b: 2 },
+          tb: ["a", "b"],
+        },
+        (_, value) => (typeof value === "bigint" ? Number(value) : value),
+        2
+      )
+    );
   });
 
   test("should return decoded output correctly", () => {
@@ -51,5 +57,23 @@ describe("Expect Obi custom function to work correctly", () => {
       targetType: TargetType.hex,
     };
     expect(getObiResult(payload)).toBe("test");
+  });
+
+  test("should decode base64 result from BandChain's request crypto price correctly", () => {
+    const payload = {
+      schema: "{symbols:[string],multiplier:u64}/{rates:[u64]}",
+      mode: ObiMode.decodeOutput,
+      targetString: "AAAAAQAAAAAAAKTT",
+      targetType: TargetType.base64,
+    };
+    expect(getObiResult(payload)).toBe(
+      JSON.stringify(
+        {
+          rates: [42195n],
+        },
+        (_, value) => (typeof value === "bigint" ? Number(value) : value),
+        2
+      )
+    );
   });
 });
