@@ -1,6 +1,13 @@
 import { Obi } from "@bandprotocol/bandchain.js";
 import { ObiMode, TargetType } from ".";
 
+const resultReturnHelper = (result: any) => {
+  if (Buffer.isBuffer(result)) {
+    return result.toString("hex");
+  } else {
+    return result;
+  }
+};
 interface ObiProps {
   schema: string;
   mode: ObiMode;
@@ -25,15 +32,18 @@ export const getObiResult = ({
   switch (mode) {
     case ObiMode.encodeInput:
     case ObiMode.encodeOutput:
-      return getObiFunction[mode](targetString);
+      const result = getObiFunction[mode](targetString);
+      return resultReturnHelper(result);
     case ObiMode.decodeInput:
     case ObiMode.decodeOutput:
       if (targetType === TargetType.base64 || targetType === TargetType.hex) {
         const buffer = Buffer.from(targetString, targetType);
-        return getObiFunction[mode](buffer);
+        const result = getObiFunction[mode](buffer);
+        return resultReturnHelper(result);
       } else {
         const buffer = Buffer.from(targetString, "utf-8");
-        return getObiFunction[mode](buffer);
+        const result = getObiFunction[mode](buffer);
+        return resultReturnHelper(result);
       }
   }
 };

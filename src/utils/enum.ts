@@ -9,4 +9,5 @@ export enum TargetType {
   base64 = "base64",
   hex = "hex",
   string = "string",
+  json = "json",
 }

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import { ObiMode, TargetType, getObiResult } from "../utils";
-import { TextInput, RadioGroupInput } from "../components";
+import { TextInput, RadioGroupInput, InputLabel } from "../components";
 
 const Container = styled.div`
   width: 50%;
@@ -11,6 +11,8 @@ const Container = styled.div`
   background-color: white;
   box-sizing: border-box;
   border: 1px solid black;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1024px) {
     width: 80%;
@@ -25,8 +27,6 @@ const Title = styled(Typography)`
 `;
 
 const Content = styled.div`
-  display: flex;
-  flex-direction: column;
   padding: 32px;
 `;
 
@@ -34,6 +34,28 @@ const StyledButton = styled(Button)`
   font-weight: 600;
   text-transform: capitalize;
   margin-top: 12px;
+  min-width: 180px;
+
+  :nth-of-type(2) {
+    margin-left: 8px;
+  }
+`;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const ResultContainer = styled.div`
+  width: auto;
+  flex: 1;
+  margin: 0 32px 32px 32px;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: #eee;
+  font-weight: 600;
+  font-size: 14px;
 `;
 
 interface RadioObject {
@@ -51,6 +73,7 @@ const typeRadioArr: RadioObject[] = [
   { value: TargetType.base64, label: "base64" },
   { value: TargetType.hex, label: "hex" },
   { value: TargetType.string, label: "string" },
+  { value: TargetType.json, label: "json" },
 ];
 
 export const HomePage = () => {
@@ -60,6 +83,15 @@ export const HomePage = () => {
   const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeOutput);
   const [targetType, setTargetType] = useState<TargetType>(TargetType.string);
   const [targetString, setTargetString] = useState<string>("test");
+  const [result, setResult] = useState<string>("");
+
+  const clearAll = () => {
+    setSchema("");
+    setObiMode(ObiMode.encodeInput);
+    setTargetType(TargetType.base64);
+    setTargetString("");
+    setResult("");
+  };
 
   return (
     <Container>
@@ -93,21 +125,32 @@ export const HomePage = () => {
           value={targetString}
           handleChange={(value: any) => setTargetString(value)}
         />
-        <StyledButton
-          variant="contained"
-          onClick={() => {
-            const result = getObiResult({
-              schema,
-              mode: obiMode,
-              targetString,
-              targetType,
-            });
-            console.log(result.toString("hex"));
-          }}
-        >
-          Get Result
-        </StyledButton>
+        <ButtonDiv>
+          <StyledButton
+            variant="contained"
+            onClick={() => {
+              const result = getObiResult({
+                schema,
+                mode: obiMode,
+                targetString,
+                targetType,
+              });
+              setResult(result);
+            }}
+          >
+            Get Result
+          </StyledButton>
+          <StyledButton variant="outlined" onClick={() => clearAll()}>
+            X Clear
+          </StyledButton>
+        </ButtonDiv>
       </Content>
+      <InputLabel style={{ marginLeft: "32px" }}>
+        {obiMode === ObiMode.encodeInput || obiMode === ObiMode.encodeOutput
+          ? "Result (hex)"
+          : "Result (any)"}
+      </InputLabel>
+      <ResultContainer>{result}</ResultContainer>
     </Container>
   );
 };
