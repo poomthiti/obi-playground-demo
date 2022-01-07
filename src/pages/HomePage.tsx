@@ -80,9 +80,11 @@ export const HomePage = () => {
   const [schema, setSchema] = useState<string>(
     "{symbol:string, px: u64, w: {a: u8, b: u8}, tb: [string]} / string"
   );
-  const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeOutput);
-  const [targetType, setTargetType] = useState<TargetType>(TargetType.string);
-  const [targetString, setTargetString] = useState<string>("test");
+  const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeInput);
+  const [targetType, setTargetType] = useState<TargetType>(TargetType.json);
+  const [targetString, setTargetString] = useState<string>(
+    `{"symbol": "BTC", "px": 9000, "w": { "a": 1, "b": 2 }, "tb": ["a", "b"]}`
+  );
   const [result, setResult] = useState<string>("");
 
   const clearAll = () => {

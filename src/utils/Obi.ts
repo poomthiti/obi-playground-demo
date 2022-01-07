@@ -4,6 +4,12 @@ import { ObiMode, TargetType } from ".";
 const resultReturnHelper = (result: any) => {
   if (Buffer.isBuffer(result)) {
     return result.toString("hex");
+  } else if (typeof result === "object") {
+    return JSON.stringify(
+      result,
+      (_, value) => (typeof value === "bigint" ? value.toString() : value),
+      2
+    );
   } else {
     return result;
   }
@@ -32,8 +38,14 @@ export const getObiResult = ({
   switch (mode) {
     case ObiMode.encodeInput:
     case ObiMode.encodeOutput:
-      const result = getObiFunction[mode](targetString);
-      return resultReturnHelper(result);
+      if (targetType === TargetType.json) {
+        const target = JSON.parse(targetString);
+        const result = getObiFunction[mode](target);
+        return resultReturnHelper(result);
+      } else {
+        const result = getObiFunction[mode](targetString);
+        return resultReturnHelper(result);
+      }
     case ObiMode.decodeInput:
     case ObiMode.decodeOutput:
       if (targetType === TargetType.base64 || targetType === TargetType.hex) {
