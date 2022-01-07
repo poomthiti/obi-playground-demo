@@ -7,7 +7,7 @@ const resultReturnHelper = (result: any) => {
   } else if (typeof result === "object") {
     return JSON.stringify(
       result,
-      (_, value) => (typeof value === "bigint" ? value.toString() : value),
+      (_, value) => (typeof value === "bigint" ? Number(value) : value),
       2
     );
   } else {

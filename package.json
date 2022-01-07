@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "unit-test": "jest"
   },
   "eslintConfig": {
     "extends": [
@@ -47,5 +48,8 @@
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
   }
 }
