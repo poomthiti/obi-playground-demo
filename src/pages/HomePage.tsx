@@ -77,14 +77,10 @@ const typeRadioArr: RadioObject[] = [
 ];
 
 export const HomePage = () => {
-  const [schema, setSchema] = useState<string>(
-    "{symbol:string, px: u64, w: {a: u8, b: u8}, tb: [string]} / string"
-  );
+  const [schema, setSchema] = useState<string>("");
   const [obiMode, setObiMode] = useState<ObiMode>(ObiMode.encodeInput);
-  const [targetType, setTargetType] = useState<TargetType>(TargetType.json);
-  const [targetString, setTargetString] = useState<string>(
-    `{"symbol": "BTC", "px": 9000, "w": { "a": 1, "b": 2 }, "tb": ["a", "b"]}`
-  );
+  const [targetType, setTargetType] = useState<TargetType>(TargetType.base64);
+  const [targetString, setTargetString] = useState<string>("");
   const [result, setResult] = useState<string>("");
 
   const clearAll = () => {
@@ -104,6 +100,7 @@ export const HomePage = () => {
           testId="input-schema"
           value={schema}
           handleChange={(value: string) => setSchema(value)}
+          placeholder="ex. {symbol:string, px: u64, w: {a: u8, b: u8}, tb: [string]} / string"
         />
         <RadioGroupInput
           dataArray={modeRadioArr}
@@ -126,6 +123,7 @@ export const HomePage = () => {
           testId="input-target-string"
           value={targetString}
           handleChange={(value: any) => setTargetString(value)}
+          placeholder="Please enter a string you wish to encode/decode"
         />
         <ButtonDiv>
           <StyledButton

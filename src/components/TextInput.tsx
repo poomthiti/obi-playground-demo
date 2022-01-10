@@ -6,6 +6,7 @@ interface InputProps {
   value: any;
   handleChange: (value: any) => void;
   label: string;
+  placeholder?: string;
 }
 
 export const TextInput = ({
@@ -13,6 +14,7 @@ export const TextInput = ({
   value,
   handleChange,
   label,
+  placeholder = "",
 }: InputProps) => {
   return (
     <FieldContainer>
@@ -21,6 +23,7 @@ export const TextInput = ({
         id={testId}
         variant="outlined"
         fullWidth
+        placeholder={placeholder}
         value={value}
         color="primary"
         inputProps={{
