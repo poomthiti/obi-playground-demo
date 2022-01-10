@@ -14,6 +14,7 @@ const resultReturnHelper = (result: any) => {
     return result;
   }
 };
+
 interface ObiProps {
   schema: string;
   mode: ObiMode;
@@ -39,23 +40,39 @@ export const getObiResult = ({
     case ObiMode.encodeInput:
     case ObiMode.encodeOutput:
       if (targetType === TargetType.json) {
-        const target = JSON.parse(targetString);
-        const result = getObiFunction[mode](target);
-        return resultReturnHelper(result);
+        try {
+          const target = JSON.parse(targetString);
+          const result = getObiFunction[mode](target);
+          return resultReturnHelper(result);
+        } catch (err: any) {
+          return err.message;
+        }
       } else {
-        const result = getObiFunction[mode](targetString);
-        return resultReturnHelper(result);
+        try {
+          const result = getObiFunction[mode](targetString);
+          return resultReturnHelper(result);
+        } catch (err: any) {
+          return err.message;
+        }
       }
     case ObiMode.decodeInput:
     case ObiMode.decodeOutput:
       if (targetType === TargetType.base64 || targetType === TargetType.hex) {
-        const buffer = Buffer.from(targetString, targetType);
-        const result = getObiFunction[mode](buffer);
-        return resultReturnHelper(result);
+        try {
+          const buffer = Buffer.from(targetString, targetType);
+          const result = getObiFunction[mode](buffer);
+          return resultReturnHelper(result);
+        } catch (err: any) {
+          return err.message;
+        }
       } else {
-        const buffer = Buffer.from(targetString, "utf-8");
-        const result = getObiFunction[mode](buffer);
-        return resultReturnHelper(result);
+        try {
+          const buffer = Buffer.from(targetString, "utf-8");
+          const result = getObiFunction[mode](buffer);
+          return resultReturnHelper(result);
+        } catch (err: any) {
+          return err.message;
+        }
       }
   }
 };
